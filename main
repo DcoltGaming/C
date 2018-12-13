@@ -1,0 +1,127 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+//find the module code and return the semester
+
+
+struct module {
+    char moduleCode[10];
+    int semesterNumber;
+    char lectureDescription[3];
+    char practicalDescription[3];
+};
+
+
+struct scheme {
+    char moduleCode[10];
+    int  yearOfStudy;
+    int numberOfStudentsRegistered;
+    int numberOfCoreModules;
+    char **coreModules;
+    unsigned int coreModulesSize;
+};
+
+int main(){
+    FILE *fp;
+    fp = fopen("C:\\Users\\Dan\\CLionProjects\\InputTest\\modules.txt", "r"); //open the file in read only
+    struct module *modules = malloc(sizeof(struct module) * 108); //TODO: NEEDS TO READ LINES THEN CHANGE DYNAMICALLY
+    int i = 0;
+    if(fp != NULL) { //if the file is not blank
+        while ( i < 108 ) {
+            fscanf(fp, "%s %d %s %s", //read the file and take two strings, a int and another string
+                   modules[i].moduleCode,
+                   &modules[i].semesterNumber,
+                   modules[i].lectureDescription,
+                   modules[i].practicalDescription);
+            i++;
+        }
+    }
+    else{
+        perror("FP ERROR: "); // throw a error
+    }
+    for (i = 0; i < 108; i++) { // print the struct //TODO: NEEDS TO READ LINES THEN CHANGE DYNAMICALLY
+       printf("%-8s %-10d  %-10s %-10s\n",
+               modules[i].moduleCode,
+             &modules[i].semesterNumber,
+              modules[i].lectureDescription,
+             modules[i].practicalDescription);
+
+   }
+    fclose(fp);
+
+    char buffer[100];
+    char *token;
+    fp = fopen("C:\\Users\\Dan\\CLionProjects\\InputTest\\schemes.txt","r");
+    struct scheme *schemes = malloc(sizeof(struct scheme) * 6);
+    i=0;
+
+    while(fgets(buffer,100,fp)) {
+        token=strtok(buffer," ");
+        strcpy(schemes[i].moduleCode,token);
+
+        token=strtok(NULL," ");
+        schemes[i].yearOfStudy = atoi(token);
+
+        token=strtok(NULL," ");
+        schemes[i].numberOfStudentsRegistered = atoi(token);
+
+        token=strtok(NULL," ");
+        schemes[i].numberOfCoreModules = atoi(token);
+
+        token=strtok(NULL," ");
+        if(token) {
+            schemes[i].coreModules=malloc(sizeof(char *));
+            schemes[i].coreModules[0]=strdup(token);
+            schemes[i].coreModulesSize=1;
+
+            token=strtok(NULL,",");
+            while(token) {
+                schemes[i].coreModules=realloc(schemes[i].coreModules,(schemes[i].coreModulesSize+1)*sizeof(char *));
+                schemes[i].coreModules[schemes[i].coreModulesSize]=strdup(token);
+                schemes[i].coreModulesSize++;
+
+                token=strtok(NULL,",");
+            }
+        }
+        i++;
+    }
+
+    for (i = 0; i < 6; i++) { // print the struct //TODO: NEEDS TO READ LINES THEN CHANGE DYNAMICALLY
+        int test = schemes[i].coreModulesSize;
+        printf("%-8s %-10d %-10d %-10d\n",
+               schemes[i].moduleCode,
+               schemes[i].yearOfStudy,
+               schemes[i].numberOfStudentsRegistered,
+               schemes[i].numberOfCoreModules);
+
+        for(int x=0; x<test; x++)
+        {
+            printf("%-8s",schemes[i].coreModules[x]);
+            printf(" ");
+        }
+
+
+    }
+
+char test1[8];
+    char test2[8];
+    char test3[8];
+    char test4[8];
+
+char comparator1[8];
+    char comparator2[8];
+    char comparator3[8];
+    char comparator4[8];
+
+    strncpy(test1,schemes[4].coreModules[0],8);
+    strncpy(test2,schemes[4].coreModules[1],8);
+   // strncpy(test3,schemes[4].coreModules[5],8);
+  //  strncpy(test4,schemes[4].coreModules[3],8);
+
+    printf("workng");
+
+
+
+    return 0;
+}
