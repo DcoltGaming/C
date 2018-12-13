@@ -1,3 +1,0 @@
-dog,2,4,2,biscuits,wet
-cat,5,4,0,biscuits,wet,dry,whiskers
-bird,1,2,0,birdseed,biscuits,bread,oats,worms,insects,crackers
